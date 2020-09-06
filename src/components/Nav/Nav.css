@@ -1,0 +1,14 @@
+.Nav {
+    margin-bottom: 5px;
+    line-height: 15px;
+}
+
+.Nav a {
+    color: blue;
+    font-size: 35px;
+    text-decoration: none;
+}
+
+.Nav a:hover {
+    color: red;
+}

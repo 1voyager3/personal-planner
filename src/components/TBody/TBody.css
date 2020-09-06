@@ -1,0 +1,9 @@
+.TBody td {
+    padding: 10px;
+    border: 1px solid black;
+    text-align: center;
+}
+.TBody .active {
+    color: red;
+    font-weight: bold;
+}
