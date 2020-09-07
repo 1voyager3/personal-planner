@@ -14,15 +14,15 @@ let month = date.getMonth();
 let currentDate = date.getDate()
 let currentMoment = { year: year,  month: month, date: currentDate}
 
-const getLastDayOfMonth= (year, month) => {
+let getLastDayOfMonth = (year, month) => {
     let date = new Date (year, month + 1, 0)
     return date.getDate();
 }
-const lastDayOfMonth = getLastDayOfMonth(year, month)
+let lastDayOfMonth = getLastDayOfMonth(year, month)
 
 // utility function defines what is the numeric day of the
 // week as a first number of the month
-const getFirstWeekDay = (year, month) => {
+let getFirstWeekDay = (year, month) => {
     let date = new Date (year, month, 1);
     let num  = date.getDay();
 
@@ -32,10 +32,10 @@ const getFirstWeekDay = (year, month) => {
         return num - 1;
     }
 }
-const firstWeekDay = getFirstWeekDay(year, month);
+let firstWeekDay = getFirstWeekDay(year, month);
 // utility function defines what is the numeric day of the
 // week as a last number of the month
-const getLastWeekDay = (year, month) => {
+let getLastWeekDay = (year, month) => {
     let date = new Date (year, month + 1, 0);
     let num  = date.getDay();
 
@@ -45,7 +45,7 @@ const getLastWeekDay = (year, month) => {
         return num - 1;
     }
 }
-const lastWeekDay = getLastWeekDay(year, month);
+let lastWeekDay = getLastWeekDay(year, month);
 
 const getPrevYear = (year, month) => {
     if (month === 0) {
@@ -84,18 +84,18 @@ const showInfo = (year, month) => {
     return `${listMonths[month]} ${year}`
 }
 
-
-const getRangeMonthDays = (lastDayOfMonth) => {
+// getting range of the days in a particular month
+let getRangeMonthDays = (lastDayOfMonth) => {
     let arr = [];
     for (let i = 1; i <= lastDayOfMonth; i++) {
         arr.push(i);
     }
     return arr;
 }
-const rangeMonthDays = getRangeMonthDays(lastDayOfMonth)
+let rangeMonthDays = getRangeMonthDays(lastDayOfMonth)
 
 // the filling of empty cells in the calendar
-const getNormalize = (arr, left, right) => {
+let getNormalize = (arr, left, right) => {
     for (let i = 0; i < left; i++) {
         arr.unshift('');
     }
@@ -104,10 +104,10 @@ const getNormalize = (arr, left, right) => {
     }
     return arr;
 }
-const normalize = getNormalize(rangeMonthDays, firstWeekDay, 6 - lastWeekDay)
+let normalize = getNormalize(rangeMonthDays, firstWeekDay, 6 - lastWeekDay)
 
 //to break into 2D Sub Array in order to fill the calendar
-const getChunk = (arr, n) => {
+let getChunk = (arr, n) => {
     let result = [];
     let countOfSubArr = Math.ceil(arr.length / n);
 
@@ -117,12 +117,16 @@ const getChunk = (arr, n) => {
     }
     return result;
 }
-const chunk = getChunk(normalize, 7)
+// let chunk = getChunk(normalize, 7)
 
-const createTable = (year, month) => {
+let createTable = (year, month) => {
 
-
-
+     lastDayOfMonth = getLastDayOfMonth(year, month)
+     firstWeekDay = getFirstWeekDay(year, month);
+     lastWeekDay = getLastWeekDay(year, month);
+     rangeMonthDays = getRangeMonthDays(lastDayOfMonth)
+     normalize = getNormalize(rangeMonthDays, firstWeekDay, 6 - lastWeekDay)
+     let chunk = getChunk(normalize, 7);
 
     return chunk.map((item, index) => {
         return <tr key={index}>
@@ -141,7 +145,7 @@ const createTable = (year, month) => {
 
 function App() {
 
-    const [table, setTable] = useState(createTable);
+    const [table, setTable] = useState(createTable(year, month));
 
     const [info, setInfo] = useState(showInfo(year, month));
 
@@ -150,14 +154,20 @@ function App() {
         month = getPrevMonth(month);
         setInfo(showInfo(year, month) )
 
-        // drawCalendar(body, year, month, currentMoment);
+        let showPrevTable = createTable(year, month);
+        setTable(showPrevTable);
+
         event.preventDefault();
+        console.log(showPrevTable)
     }
 
     const showNextCalendar = (event) => {
         year = getNextYear(year, month);
         month = getNextMonth(month);
         setInfo(showInfo(year, month) )
+
+        let showNextTable = createTable(year, month);
+        setTable(showNextTable);
 
         // drawCalendar(body, year, month, currentMoment);
         event.preventDefault();
@@ -173,9 +183,7 @@ function App() {
       />
       <table>
           <THead className="THead" listWeek={listWeek}/>
-          <TBody
-              showTable={table}
-          />
+          <TBody showTable={table} />
       </table>
     </div>
   );
