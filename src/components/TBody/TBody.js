@@ -4,7 +4,9 @@ import './TBody.css'
 function TBody ({ showTable }) {
 
     return (
-        <tbody className="TBody" >
+        <tbody
+            className="TBody"
+        >
             {showTable}
         </tbody>
     )
